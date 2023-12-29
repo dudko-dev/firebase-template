@@ -1,0 +1,79 @@
+name: Deploy Database, Storage, Firestore
+on:
+  push:
+    branches:
+      - dev
+env:
+  NODE_VERSION: 20
+  TOKEN_FOR_WORKFLOW: ${{ secrets.TOKEN_FOR_WORKFLOW }}
+  FIREBASE_PROJECT: "development"
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase/functions/accounts/development.json
+  BRANCH: "dev"
+  FIREBASE_CHILD_REPO: "dudko-dev/firebase-template-functions"
+  FIREBASE_CHILD_BRANCH: "dev"
+jobs:
+  deploy:
+    name: Deploy Database, Storage, Firestore
+    runs-on: ubuntu-latest
+    env:
+      ENVKEY: ${{ secrets.ENVKEY }}
+    timeout-minutes: 10
+    steps:
+      - name: Сheckout firebase repo (${{ github.repository }})
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          path: "firebase"
+      - name: Сheckout firebase functions repo (${{ env.FIREBASE_CHILD_REPO }})
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.FIREBASE_CHILD_REPO }}
+          ref: refs/heads/${{ env.FIREBASE_CHILD_BRANCH }}
+          token: ${{ env.TOKEN_FOR_WORKFLOW }}
+          path: "firebase/functions"
+      - name: Change mode directory
+        run: chmod 0766 -R firebase
+        working-directory: ${{ github.workspace }}
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install deploy dependencies
+        run: sudo npm install firebase-tools -g
+        working-directory: ${{ github.workspace }}/firebase
+      - name: Export envkey to file
+        run: echo "$ENVKEY">./.envkey
+        working-directory: ${{ github.workspace }}/firebase/functions
+      - name: Decrypt env and accounts files
+        run: npm run decrypt
+        working-directory: ${{ github.workspace }}/firebase/functions
+      - name: Select firebase project
+        run: firebase use $FIREBASE_PROJECT
+        working-directory: ${{ github.workspace }}/firebase
+      - name: Deploy to firebase
+        run: firebase deploy -m "Autodeploy from GitHUB ($GITHUB_ACTOR)" --only database,storage,firestore
+        working-directory: ${{ github.workspace }}/firebase
+      - name: The job has failed - archive result
+        if: ${{ failure() }}
+        run: |
+          if [[ -d ${{ github.workspace }}/firebase ]]; then
+            tar -czf firebase.tar.gz firebase;
+          fi
+        working-directory: ${{ github.workspace }}
+      - name: The job has failed - archive npm logs
+        if: ${{ failure() }}
+        run: |
+          if [[ -d /home/runner/.npm/_logs ]]; then
+            tar -czf ${{ github.workspace }}/npm-logs.tar.gz /home/runner/.npm/_logs;
+          fi
+        working-directory: /
+      - name: The job has failed - upload artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FIREBASE_PROJECT }}-firebase-debug
+          path: |
+            ${{ github.workspace }}/firebase.tar.gz
+            ${{ github.workspace }}/npm-logs.tar.gz
+          retention-days: 1

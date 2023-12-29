@@ -1,0 +1,73 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // MARK: - Disabling access for all refs
+
+  	match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // MARK: - Authentication
+
+    function isSignedIn() {
+      return ((request.auth != null)
+        && (request.auth.uid != null));
+    }
+
+    // MARK: - Model Helpers
+
+    function getUserPath() {
+      return (/databases/(default)/documents/users/$(request.auth.uid));
+    }
+
+    function userExists() {
+      return (isSignedIn()
+        && (request.auth.token != null)
+        && firestore.exists(getUserPath()));
+    }
+
+    function getUserData() {
+      return firestore.get(getUserPath()).data;
+    }
+
+    function getAdminPath() {
+      return (/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return (isSignedIn()
+        && (request.auth.token != null)
+        && firestore.exists(getAdminPath()));
+    }
+
+    function getAdminData() {
+      return firestore.get(getAdminPath()).data;
+    }
+
+    // MARK: - Public Access
+
+    match /public/{allPaths=**} {
+      allow read: if true;
+    }
+
+    // MARK: - User Access
+
+    match /users/{userId}/{allPaths=**} {
+      allow read: if (isSignedIn()
+      	&& (request.auth.uid == userId));
+      // allow write: if (
+      // 	isSignedIn()
+      //	&& (request.auth.uid == userId)
+      //	&& (request.resource.size < 5 * 1024 * 1024)
+      //	&& request.resource.contentType.matches('image/.*')
+      // )
+    }
+
+    // MARK: - Admin Access
+
+    match /{allPaths=**} {
+      allow read, write: if (isSignedIn()
+      	&& isAdmin());
+    }
+  }
+}

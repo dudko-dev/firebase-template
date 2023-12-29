@@ -1,0 +1,40 @@
+{
+  "projects": {
+    "production": "fir-template-40a59",
+    "staging": "fir-template-staging",
+    "development": "fir-template-development",
+    "default": "fir-template-40a59"
+  },
+  "targets": {
+    "fir-template-development": {
+      "hosting": {
+        "website": [
+          "fir-template-website-development"
+        ],
+        "api": [
+          "fir-template-api-development"
+        ]
+      }
+    },
+    "fir-template-staging": {
+      "hosting": {
+        "website": [
+          "fir-template-website-staging"
+        ],
+        "api": [
+          "fir-template-api-staging"
+        ]
+      }
+    },
+    "fir-template-40a59": {
+      "hosting": {
+        "website": [
+          "fir-template-website"
+        ],
+        "api": [
+          "fir-template-api"
+        ]
+      }
+    }
+  }
+}

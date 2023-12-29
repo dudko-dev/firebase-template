@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // MARK: - Disabling access for all refs
+
+  	match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // MARK: - Authentication
+
+    function isSignedIn() {
+      return ((request.auth != null)
+        && (request.auth.uid != null));
+    }
+
+    // MARK: - Model Helpers
+
+    function getUserPath() {
+      return (/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function userExists() {
+      return (isSignedIn()
+        && (request.auth.token != null)
+        && exists(getUserPath()));
+    }
+
+    function getUserData() {
+      return get(getUserPath()).data;
+    }
+
+    function getAdminPath() {
+      return (/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return (isSignedIn()
+        && (request.auth.token != null)
+        && exists(getAdminPath()));
+    }
+
+    function getAdminData() {
+      return get(getAdminPath()).data;
+    }
+
+    // MARK: - User Access
+
+    match /_internal_/config {
+    	allow read: if true;
+    }
+
+    match /users/{userId}{
+      allow read: if (isSignedIn()
+      	&& (request.auth.uid == userId));
+      // allow write: if (isSignedIn()
+    	// && (request.auth.uid == userId));
+    }
+
+    // MARK: - Admin Access
+
+    match /{allPaths=**} {
+      allow read, write: if (isSignedIn()
+      	&& isAdmin());
+    }
+  }
+}

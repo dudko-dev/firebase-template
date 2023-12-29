@@ -1,0 +1,6 @@
+.DS_Store
+.firebase
+/functions/
+/hosting/website/
+/hosting/api/
+*.log
