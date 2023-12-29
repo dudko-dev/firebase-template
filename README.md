@@ -31,3 +31,31 @@ git clone $FIREBASE_WEBSITE_REPO $FIREBASE_WEBSITE_DIR
 mkdir $FIREBASE_WEBAPI_DIR
 git clone $FIREBASE_WEBAPI_REPO $FIREBASE_WEBAPI_DIR
 ```
+
+## Before using
+
+- setup your firebase project(s) here: <https://console.firebase.google.com/u/0/>
+- create realtime database here: <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/database>
+- create firestore here: <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/firestore>
+- create storage: <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/storage>
+- add websites (website, api) in hosting: <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/hosting>
+- edit `.firebaserc` file
+- create sdk account for web application and setup in in the `hosting/website/.env.*` files
+- create service account key and copy it into `functions/accounts`, you can create it here: <https://console.cloud.google.com/iam-admin/serviceaccounts>
+- service account must have rights (minimum): `Cloud Functions Admin`, `Cloud Storage for Firebase Admin`, `Firebase Admin`, `Firebase Admin SDK Administrator Service Agent`, `Firebase Realtime Database Admin`, `Service Account Token Creator` (to deploy your project), `Service Account User` (to deploy your project), you can add it here: <https://console.cloud.google.com/iam-admin/iam>
+- edit encrypt/decrypt settings in `functions/scripts/encryption-settings.json`
+- edit all workflow files in `.github/workflows` directories in `./`, `./functions`, `./hosting/website`, `./hosting/api`
+- add `ENVKEY` (from `functions/.envkey`) and `TOKEN_FOR_WORKFLOW` (you can create PAT here: <https://github.com/settings/tokens?type=beta>) to every of the repos
+
+## Before using functions
+
+- add your service account files to `functions/accounts` directory (you can use more than one file for the different projects)
+- add your environments variables in `functions/.env.YOUR_PROJECT_ID` file (you can use more than one file for the different projects)
+- add random uuid/key in `functions/.envkey` file
+- encrypt your files `npm run encrypt` in `functions`
+
+## Before using website
+
+- setup authorized domains in <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/authentication/settings>
+- customize url action like to `https://YOUR_HOSTNAME/auth/action` in <https://console.firebase.google.com/u/0/project/YOUR_PROJECT_ID/authentication/emails> (see `.env` files for more info)
+- add your own project settings to `.env.*` files
