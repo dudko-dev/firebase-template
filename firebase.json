@@ -51,7 +51,12 @@
     {
       "target": "api",
       "public": "hosting/api/build",
+      "redirects": [],
       "rewrites": [
+        {
+          "source": "/",
+          "destination": "/index.html"
+        },
         {
           "source": "**",
           "function": "api"
