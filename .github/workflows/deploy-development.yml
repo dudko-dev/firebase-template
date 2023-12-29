@@ -25,6 +25,7 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.ref }}
           path: "firebase"
+          persist-credentials: false
       - name: Сheckout firebase functions repo (${{ env.FIREBASE_CHILD_REPO }})
         uses: actions/checkout@v4
         with:
@@ -32,6 +33,7 @@ jobs:
           ref: refs/heads/${{ env.FIREBASE_CHILD_BRANCH }}
           token: ${{ env.TOKEN_FOR_WORKFLOW }}
           path: "firebase/functions"
+          persist-credentials: false
       - name: Change mode directory
         run: chmod 0766 -R firebase
         working-directory: ${{ github.workspace }}
