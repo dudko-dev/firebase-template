@@ -56,26 +56,26 @@ jobs:
       - name: Deploy to firebase
         run: firebase deploy -m "Autodeploy from GitHUB ($GITHUB_ACTOR)" --only database,storage,firestore
         working-directory: ${{ github.workspace }}/firebase
-      - name: The job has failed - archive result
-        if: ${{ failure() }}
-        run: |
-          if [[ -d ${{ github.workspace }}/firebase ]]; then
-            tar -czf firebase.tar.gz firebase;
-          fi
-        working-directory: ${{ github.workspace }}
-      - name: The job has failed - archive npm logs
-        if: ${{ failure() }}
-        run: |
-          if [[ -d /home/runner/.npm/_logs ]]; then
-            tar -czf ${{ github.workspace }}/npm-logs.tar.gz /home/runner/.npm/_logs;
-          fi
-        working-directory: /
-      - name: The job has failed - upload artifacts
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.FIREBASE_PROJECT }}-firebase-debug
-          path: |
-            ${{ github.workspace }}/firebase.tar.gz
-            ${{ github.workspace }}/npm-logs.tar.gz
-          retention-days: 1
+      # - name: The job has failed - archive result
+      #   if: ${{ failure() }}
+      #   run: |
+      #     if [[ -d ${{ github.workspace }}/firebase ]]; then
+      #       tar -czf firebase.tar.gz firebase;
+      #     fi
+      #   working-directory: ${{ github.workspace }}
+      # - name: The job has failed - archive npm logs
+      #   if: ${{ failure() }}
+      #   run: |
+      #     if [[ -d /home/runner/.npm/_logs ]]; then
+      #       tar -czf ${{ github.workspace }}/npm-logs.tar.gz /home/runner/.npm/_logs;
+      #     fi
+      #   working-directory: /
+      # - name: The job has failed - upload artifacts
+      #   if: ${{ failure() }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.FIREBASE_PROJECT }}-firebase-debug
+      #     path: |
+      #       ${{ github.workspace }}/firebase.tar.gz
+      #       ${{ github.workspace }}/npm-logs.tar.gz
+      #     retention-days: 1
