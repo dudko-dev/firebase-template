@@ -4,8 +4,8 @@ This is part of the [firebase-template project](!https://github.com/search?q=top
 
 - `firebase` - firebase settings, including hosting settings and basic access rights, repo: [dudko-dev/firebase-template](https://github.com/dudko-dev/firebase-template)
 - `firebase/functions` - gRPC and http cloud functions, repo: [dudko-dev/firebase-template-functions](https://github.com/dudko-dev/firebase-template-functions)
-- `firebase/hosting/api` - a web portal based on react, repo: [dudko-dev/firebase-template-website](https://github.com/dudko-dev/firebase-template-website)
-- `firebase/hosting/website` - web portal on js, repo: [dudko-dev/firebase-template-api](https://github.com/dudko-dev/firebase-template-api)
+- `firebase/hosting/website` - a web portal based on react, repo: [dudko-dev/firebase-template-website](https://github.com/dudko-dev/firebase-template-website)
+- `firebase/hosting/api` - web portal on js, repo: [dudko-dev/firebase-template-api](https://github.com/dudko-dev/firebase-template-api)
 
 The project allows you to quickly deploy the basic configuration of firebase, configure the basic skeleton of cloud functions, deploy a portal on react with ready-made authorization/registration/email confirmation/password recovery methods.
 
@@ -47,6 +47,11 @@ git clone $GIT_URL$FIREBASE_WEBAPI_REPO $FIREBASE_WEBAPI_DIR
 - edit encrypt/decrypt settings in `functions/scripts/encryption-settings.json`
 - edit all workflow files in `.github/workflows` directories in `./`, `./functions`, `./hosting/website`, `./hosting/api`
 - add `ENVKEY` (from `functions/.envkey`) and `TOKEN_FOR_WORKFLOW` (you can create PAT here: <https://github.com/settings/tokens?type=beta>) to every of the repos
+- to deploy cloud functions, you also need to enable the following APIs:
+  - [CloudFunctions API](https://console.cloud.google.com/marketplace/product/google/cloudfunctions.googleapis.com)
+  - [CloudBuild API](https://console.cloud.google.com/marketplace/product/google/cloudbuild.googleapis.com)
+  - [EventArc API](https://console.cloud.google.com/marketplace/product/google/eventarc.googleapis.com)
+  - [CloudRun API](https://console.cloud.google.com/marketplace/product/google/run.googleapis.com)
 
 ## Before using functions
 
