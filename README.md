@@ -43,7 +43,7 @@ git clone $GIT_URL$FIREBASE_WEBAPI_REPO $FIREBASE_WEBAPI_DIR
 - edit `.firebaserc` file
 - create sdk account for web application and setup in in the `hosting/website/.env.*` files
 - create service account key and copy it into `functions/accounts`, you can create it here: <https://console.cloud.google.com/iam-admin/serviceaccounts>
-- service account must have rights (minimum): `Cloud Functions Admin`, `Cloud Storage for Firebase Admin`, `Firebase Admin`, `Firebase Admin SDK Administrator Service Agent`, `Firebase Realtime Database Admin`, `Service Account Token Creator` (to deploy your project), `Service Account User` (to deploy your project), you can add it here: <https://console.cloud.google.com/iam-admin/iam>
+- service account must have rights (minimum): `Cloud Functions Admin`, `Cloud Storage for Firebase Admin`, `Firebase Admin`, `Firebase Admin SDK Administrator Service Agent`, `Firebase Realtime Database Admin`, `Service Account Token Creator` (to deploy your project), `Service Account User` (to deploy your project), `Artifact Registry Repository Administrator` (to clean your artifact registry after deploying), you can add it here: <https://console.cloud.google.com/iam-admin/iam>
 - edit encrypt/decrypt settings in `functions/scripts/encryption-settings.json`
 - edit all workflow files in `.github/workflows` directories in `./`, `./functions`, `./hosting/website`, `./hosting/api`
 - add `ENVKEY` (from `functions/.envkey`) and `TOKEN_FOR_WORKFLOW` (you can create PAT here: <https://github.com/settings/tokens?type=beta>) to every of the repos

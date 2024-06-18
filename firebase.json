@@ -7,9 +7,31 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
+    "ignore": [
+      ".gcloudignore",
+      ".git",
+      ".github",
+      ".nyc_output",
+      ".gitignore",
+      ".vscode",
+      ".prettierrc",
+      ".eslintrc",
+      ".eslintignore",
+      ".envkey",
+      ".editorconfig",
+      ".env.local",
+      ".env.local.enc",
+      "tsconfig.json",
+      "ignoreUpdatesModules.json",
+      "test",
+      "src",
+      "bigquery-schemes",
+      "accounts",
+      "scripts",
+      "*.log",
+      "*.md",
+      "*.enc"
     ]
   },
   "storage": {
